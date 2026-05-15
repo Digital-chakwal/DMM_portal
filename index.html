@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhok Malik Mehmand | Digital Command Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- THEMES --- */
+        :root {
+            --primary: #25D366; 
+            --secondary: #128C7E;
+            --bg: #0f172a;      
+            --card-bg: #1e293b; 
+            --text: #f1f5f9;    
+            --footer-bg: #000000;
+            --border-color: #334155;
+        }
+
+        .theme-white {
+            --primary: #01411c;
+            --secondary: #25D366;
+            --bg: #ffffff;
+            --card-bg: #f8fafc;
+            --text: #1e293b;
+            --footer-bg: #01411c;
+            --border-color: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: all 0.3s ease; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- DETAILED HEADER --- */
+        header {
+            background: var(--bg);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+        }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-text { font-size: 1.6rem; font-weight: 900; color: var(--primary); text-transform: uppercase; }
+        
+        .nav-links { display: none; } /* Mobile par hidden */
+        @media (min-width: 768px) {
+            .nav-links { display: flex; gap: 20px; }
+            .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+            .nav-links a:hover { color: var(--primary); }
+        }
+
+        /* --- SETTINGS SIDEBAR --- */
+        .side-settings {
+            position: fixed; top: 0; right: -350px; width: 300px; height: 100%;
+            background: var(--card-bg); z-index: 2000; padding: 30px; 
+            box-shadow: -5px 0 20px rgba(0,0,0,0.5); border-left: 2px solid var(--primary);
+        }
+        .side-settings.active { right: 0; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 1500; backdrop-filter: blur(5px); }
+        .overlay.active { display: block; }
+
+        /* --- HERO BANNER --- */
+        .hero {
+            height: 50vh;
+            background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(37, 211, 102, 0.2)), url('hero.png');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; border-bottom: 4px solid var(--primary);
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
+
+        /* --- IMAGE SLIDER SECTION --- */
+        .slider-section { padding: 40px 0; background: var(--bg); }
+        .slider-container {
+            width: 90%; max-width: 1100px; margin: 0 auto;
+            height: 300px; border-radius: 20px; overflow: hidden;
+            border: 3px solid var(--primary); position: relative;
+        }
+        .slider-wrapper { display: flex; width: 500%; height: 100%; }
+        .slider-wrapper img { width: 20%; height: 100%; object-fit: cover; }
+
+        /* --- LATEST NEWS (WITH THUMBNAIL) --- */
+        .news-update-bar { padding: 20px 5%; }
+        .news-link-card {
+            background: var(--card-bg); border-radius: 15px; display: flex;
+            align-items: center; text-decoration: none; color: inherit;
+            overflow: hidden; border: 1px solid var(--border-color);
+            max-width: 900px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .news-link-card:hover { border-color: var(--primary); transform: scale(1.02); }
+        .thumb-box { width: 100px; height: 100px; flex-shrink: 0; }
+        .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+        .news-info { padding: 15px; }
+
+        /* --- VILLAGE PORTAL (WHATSAPP) --- */
+        .portal-section { padding: 50px 5%; text-align: center; }
+        .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .portal-card { background: var(--card-bg); padding: 30px; border-radius: 20px; border-bottom: 5px solid var(--primary); }
+        .whatsapp-btn { background: #25D366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; display: inline-block; margin-top: 20px; font-weight: bold; }
+
+        /* --- DETAILED FOOTER --- */
+        footer { background: var(--footer-bg); color: #fff; padding: 60px 5% 20px; border-top: 3px solid var(--primary); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h3 { color: var(--primary); margin-bottom: 20px; font-size: 1.2rem; }
+        .footer-col p, .footer-col li { font-size: 0.9rem; margin-bottom: 10px; opacity: 0.8; list-style: none; }
+        .footer-col a { color: #fff; text-decoration: none; }
+        .footer-col a:hover { color: var(--primary); }
+        .social-icons { display: flex; gap: 15px; font-size: 1.5rem; margin-top: 15px; }
+        .footer-bottom { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
+
+    </style>
+</head>
+<body id="mainBody">
+
+    <div class="overlay" id="overlay" onclick="toggleSettings()"></div>
+
+    <!-- SETTINGS -->
+    <div class="side-settings" id="sideSettings">
+        <h3>Theme Settings</h3>
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+        <button onclick="changeTheme('dark')" style="background:#1e293b; color:white; width:100%; padding:15px; margin-bottom:10px; border:1px solid var(--primary); cursor:pointer; border-radius:10px;">Dark & Green (Default)</button>
+        <button onclick="changeTheme('white')" style="background:#ffffff; color:#01411c; width:100%; padding:15px; border:1px solid #01411c; cursor:pointer; border-radius:10px;">Classic White</button>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo-area">
+            <i class="fas fa-microchip" style="color: var(--primary); font-size: 1.5rem;"></i>
+            <div class="logo-text">DM Digital</div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="news.html">News</a>
+            <a href="story.html">History</a>
+            <a href="https://chat.whatsapp.com/Eh7qIseIQLw4zmZNBNMVy8">Join Portal</a>
+        </div>
+        <i class="fas fa-bars-staggered three-bars" style="font-size: 1.5rem; color: var(--primary); cursor: pointer;" onclick="toggleSettings()"></i>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>DHOK MALIK MEHMAND</h1>
+        <p>Preserving History, Empowering the Future</p>
+    </section>
+
+    <!-- IMAGE SLIDER -->
+    <section class="slider-section">
+        <div class="slider-container">
+            <div class="slider-wrapper" id="slider">
+                <img src="1.png" alt="Slide 1">
+                <img src="1778603809931.png" alt="Slide 2">
+                <img src="3.png" alt="Slide 3">
+                <img src="4.png" alt="Slide 4">
+                <img src="5.png" alt="Slide 5">
+            </div>
+        </div>
+    </section>
+
+    <!-- LATEST NEWS -->
+    <div class="news-update-bar">
+        <a href="news.html" class="news-link-card">
+            <div class="thumb-box">
+                <img src="news-thumb.jpg" onerror="this.src='https://via.placeholder.com/100?text=News'">
+            </div>
+            <div class="news-info">
+                <span style="background:red; color:white; padding:2px 8px; font-size:0.7rem; font-weight:bold; border-radius:4px;">NEW UPDATE</span>
+                <h4 style="margin-top:5px;">Village News Page is Now Live!</h4>
+                <p style="font-size:0.8rem; opacity:0.7;">Click here to read all updates...</p>
+            </div>
+            <i class="fas fa-arrow-right" style="margin-left:auto; margin-right:20px; color:var(--primary);"></i>
+        </a>
+    </div>
+
+    <!-- VILLAGE PORTAL -->
+    <section class="portal-section">
+        <h2 style="color: var(--primary);">Village Digital Portal</h2>
+        <div class="portal-grid">
+            <div class="portal-card">
+                <i class="fab fa-whatsapp" style="font-size: 3rem; color: #25D366;"></i>
+                <h3 style="margin: 15px 0;">WhatsApp Community</h3>
+                <p>Connect with over 500+ residents for real-time village updates.</p>
+                <a href="https://chat.whatsapp.com/Eh7qIseIQLw4zmZNBNMVy8" class="whatsapp-btn">Join DMM Group</a>
+            </div>
+            <div class="portal-card">
+                <i class="fas fa-database" style="font-size: 3rem; color: var(--primary);"></i>
+                <h3 style="margin: 15px 0;">Digital Records</h3>
+                <p>Accessing land documents and family trees (Coming Soon).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DETAILED FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>DM Digital Hub</h3>
+                <p>Dhok Malik Mehmand's first official digital platform dedicated to unity and progress.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="https://chat.whatsapp.com/Eh7qIseIQLw4zmZNBNMVy8"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home Page</a></li>
+                    <li><a href="news.html">Latest News</a></li>
+                    <li><a href="story.html">Village History</a></li>
+                    <li><a href="#">Public Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Dhok Malik Mehmand, District Attock</p>
+                <p><i class="fas fa-envelope"></i> contact@dmdigital.pk</p>
+                <p><i class="fas fa-phone"></i> +92 343 0000000</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Dhok Malik Mehmand Portal | Designed & Developed by **blackthorn**
+        </div>
+    </footer>
+
+    <script>
+        function toggleSettings() {
+            document.getElementById('sideSettings').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function changeTheme(theme) {
+            const body = document.getElementById('mainBody');
+            body.classList.remove('theme-white');
+            if(theme === 'white') body.classList.add('theme-white');
+            toggleSettings();
+        }
+
+        // Automatic Slider Fix
+        let idx = 0;
+        const slider = document.getElementById('slider');
+        function slide() {
+            idx++;
+            if(idx > 4) idx = 0;
+            slider.style.transform = `translateX(${-idx * 20}%)`;
+            slider.style.transition = "transform 1s ease-in-out";
+        }
+        setInterval(slide, 3000);
+    </script>
+</body>
+</html>
+

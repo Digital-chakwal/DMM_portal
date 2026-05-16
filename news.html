@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM NEWS FEED | LIVE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #25D366;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 50px; }
+
+        header {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+
+        /* NEWS CARD STYLE */
+        .news-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 35px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* VIDEO & PHOTO OVERLAY SYSTEM */
+        .media-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+
+        .media-container video, .media-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* PROFESSIONAL NEWS FRAME (Jo aapne photo bheji thi) */
+        .news-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('news.jpg'); /* Aapki bheji hui frame image */
+            background-size: 100% 100%;
+            pointer-events: none; /* Video control touch ko nahi rokega */
+            z-index: 5;
+        }
+
+        /* DYNAMIC HEADLINE ON VIDEO */
+        .breaking-tag {
+            position: absolute;
+            bottom: 42px; /* Screenshot ke mutabiq adjustment */
+            left: 30px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 10;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .content-area { padding: 20px; border-top: 1px solid #334155; }
+        .content-area h2 { color: var(--primary); margin-bottom: 10px; font-size: 1.4rem; }
+        .content-area p { opacity: 0.8; font-size: 1rem; line-height: 1.5; }
+        .news-date { font-size: 0.8rem; color: #888; margin-top: 15px; display: block; }
+
+        /* REFRESH BUTTON */
+        .refresh-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: #000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2 style="color: var(--primary); letter-spacing: 2px;">
+            <i class="fas fa-broadcast-tower"></i> DM DIGITAL NEWS
+        </h2>
+    </header>
+
+    <div class="container" id="news-feed">
+        <div style="text-align:center; padding: 50px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+            <p style="margin-top:10px;">Connecting to Rootwave Zenith...</p>
+        </div>
+    </div>
+
+    <div class="refresh-btn" onclick="location.reload()">
+        <i class="fas fa-sync-alt"></i>
+    </div>
+
+    <script>
+        async function loadNews() {
+            try {
+                // db.json se data lena (Cache se bachne ke liye timestamp)
+                const response = await fetch('db.json?t=' + Date.now());
+                const data = await response.json();
+                const feed = document.getElementById('news-feed');
+                
+                if (!data.news || data.news.length === 0) {
+                    feed.innerHTML = "<p style='text-align:center;'>Abhi koi news mojood nahi hai.</p>";
+                    return;
+                }
+
+                feed.innerHTML = ''; // Loading spinner hatane ke liye
+
+                data.news.forEach((item, index) => {
+                    const isVideo = item.file.match(/\.(mp4|webm|ogg)$/i);
+                    
+                    const card = `
+                        <div class="news-card">
+                            <div class="media-container">
+                                ${isVideo ? 
+                                    `<video id="video-${index}" src="${item.file}" controls poster="news-thumb.jpg"></video>` : 
+                                    `<img src="${item.file}">`
+                                }
+                                <div class="news-frame"></div>
+                                <div class="breaking-tag">${item.title}</div>
+                            </div>
+                            <div class="content-area">
+                                <h2>${item.title}</h2>
+                                <p>${item.desc}</p>
+                                <span class="news-date">
+                                    <i class="far fa-calendar-alt"></i> ${item.date} | DM DIGITAL BROADCAST
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    feed.innerHTML += card;
+                });
+            } catch (error) {
+                document.getElementById('news-feed').innerHTML = "<p style='color:red; text-align:center;'>Error: Data sync fail ho gaya!</p>";
+                console.error("Fetch Error:", error);
+            }
+        }
+
+        // Page load hote hi news dikhao
+        window.onload = loadNews;
+    </script>
+</body>
+</html>
+

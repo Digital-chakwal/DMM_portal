@@ -1,4 +1,11 @@
 {
   "projects": [],
-  "news": []
+  "news": [
+    {
+      "title": "Headline ",
+      "desc": "He'll ",
+      "file": "https://Digital-chakwal.github.io/DMM_portal/news_media/VID_20260427_032354_950.mp4",
+      "date": "18 May, 12:02"
+    }
+  ]
 }
